@@ -9,7 +9,7 @@ const cubes = {
     blue: 14
 }
 
-const total = values.map((value) => {
+const gameData = values.map((value) => {
     const gameCubes = {
         red: 0,
         green: 0,
@@ -36,8 +36,17 @@ const total = values.map((value) => {
         id: parseInt(value.split(":")[0].replace("Game ", "")),
         ...gameCubes
     }
-}).filter((value) => {
+})
+
+const sumOfIds = gameData.filter((value) => {
     return value.red <= cubes.red && value.blue <= cubes.blue && value.green <= cubes.green}
 ).reduce((acc, value) => (acc + value.id), 0)
 
-console.log(total)
+console.log("Sum Of Ids: ", sumOfIds)
+
+const powersSum = gameData.map((game) => {
+    const cubeCount = [game.red, game.blue, game.green].filter(x => x > 0)
+    return cubeCount.reduce((acc, curr) => acc * curr, 1)
+}).reduce((acc, curr) => acc + curr, 0);
+
+console.log("Sum of Powers: ", powersSum)
