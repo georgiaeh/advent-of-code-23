@@ -20,15 +20,13 @@ const gameData = values.map((value) => {
 
     rounds.map((round) => {
         round.split(",").map(x => x.trim()).map((x) => {
-            if (x.includes("red")){
-                gameCubes.red = parseInt(x.replace("red")) > gameCubes.red ? parseInt(x.replace("red")) : gameCubes.red
-            }
-            if(x.includes("blue")){
-                gameCubes.blue = parseInt(x.replace("blue")) > gameCubes.blue ? parseInt(x.replace("blue")) : gameCubes.blue
-            }
-            if(x.includes("green")){
-                gameCubes.green = parseInt(x.replace("green")) > gameCubes.green ? parseInt(x.replace("green")) : gameCubes.green
-            }
+
+            Object.keys(cubes).map((colour) => {
+                if (x.includes(colour)) {
+                    const count = parseInt(x.replace(colour))
+                    gameCubes[colour] = count > gameCubes[colour] ? count : gameCubes[colour]
+                }
+            })
         })
     })
 
@@ -38,8 +36,8 @@ const gameData = values.map((value) => {
     }
 })
 
-const sumOfIds = gameData.filter((value) => {
-    return value.red <= cubes.red && value.blue <= cubes.blue && value.green <= cubes.green}
+const sumOfIds = gameData.filter((value) => 
+    Object.keys(cubes).every((colour) => value[colour] <= cubes[colour])
 ).reduce((acc, value) => (acc + value.id), 0)
 
 console.log("Sum Of Ids: ", sumOfIds)
