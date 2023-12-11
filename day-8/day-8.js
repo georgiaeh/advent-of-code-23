@@ -18,19 +18,35 @@ const getNextKey = (currentKey, instruction) => {
     return map[currentKey][instruction]
 } 
 
-let currentKey = "AAA"
-let steps = 0;
+const countSteps = (startingKey, instructions, finishFn) => {
+    let currentKey = startingKey
+    let steps = 0;
 
-for(let i = 0; i < instructions.length; i++){
-    steps = steps + 1
-    const nextKey = getNextKey(currentKey, instructions[i])
-    if(nextKey !== 'ZZZ') {
-        currentKey = nextKey
-        if(i + 1 === instructions.length) {
-            i=-1
+    for(let i = 0; i < instructions.length; i++){
+        steps = steps + 1
+        const nextKey = getNextKey(currentKey, instructions[i])
+        if(!finishFn(nextKey)) {
+            currentKey = nextKey
+            if(i + 1 === instructions.length) {
+                i=-1
+            }
+        } else {
+            return steps
         }
-    } else {
-        console.log(steps)
     }
 }
+
+//part 1
+console.log("PART 1: ", countSteps("AAA", instructions, (key) => key === 'ZZZ'))
+
+//part 2
+const startingNodes = Object.keys(map).filter((key) => key.endsWith('A'))
+
+console.log(startingNodes)
+
+const stepsPerNode = startingNodes.map((node) => countSteps(node, instructions, (key) => key.endsWith('Z')))
+
+console.log(stepsPerNode)
+
+//get lcm of stepsPerNode
 
